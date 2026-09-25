@@ -28,20 +28,26 @@ def test_assistant_returns_not_empty(message: str) -> None:
     
 
 
-# def test_assistant_emits_a_span(
-#     span_exporter: InMemorySpanExporter,
-#     message: str, ticket_id: str, role: str
-# ) -> None:
-#     """A staff_assistant_reply span is exported after each call."""
-#     span_exporter.clear()
-#     staff_assistant_reply(message=SMOKE_INPUTS[0], ticket_id="3", role="staff")
+def test_assistant_emits_a_span(
+    span_exporter: InMemorySpanExporter,
+) -> None:
+    span_exporter.clear()
 
-#     spans = span_exporter.get_finished_spans()
-#     assert len(spans) > 0, (
-#         "No spans exported after staff_assistant_reply call"
-#     )
-#     span_names = [s.name for s in spans]
-#     assert "staff_assistant_reply" in span_names, (
-#         f"Expected 'staff_assistant_reply' span. "
-#         f"Spans found: {span_names}"
-#     )
+    staff_assistant_reply(
+        message=SMOKE_INPUTS[0],
+        ticket_id="3",
+        role="staff",
+    )
+
+    spans = span_exporter.get_finished_spans()
+
+    assert len(spans) > 0, (
+        "No spans exported after staff_assistant_reply call"
+    )
+
+    span_names = [s.name for s in spans]
+
+    assert "staff_assistant_reply" in span_names, (
+        f"Expected 'staff_assistant_reply' span. "
+        f"Spans found: {span_names}"
+    )
